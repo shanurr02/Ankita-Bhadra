@@ -18,7 +18,7 @@ export const CREATOR_PROFILE = {
 
   location: 'Mumbai & Kolkata, India',
 
-  portraitImage: 'public/assets/images/profile.JPEG',
+  portraitImage: '/assets/images/profile.JPEG',
 
   experienceYears: '4+ Years',
   totalViews: '3.8M+',
