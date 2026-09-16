@@ -436,7 +436,7 @@ export const BrandsMarquee: React.FC = () => {
                 sm:text-xs
               "
             >
-              Authentic audience · Organic engagement ·
+              Authentic Audience · Organic Engagement ·
               Brand-safe collaborations
             </span>
           </div>
