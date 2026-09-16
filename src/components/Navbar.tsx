@@ -36,12 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
             Brand Reels
           </a>
 
-          <a
-            href="#faq-section"
-            className="hover:text-[#1A1816] transition-colors py-1"
-          >
-            FAQ
-          </a>
+
 
           <a
             href={CREATOR_PROFILE.instagramUrl}
