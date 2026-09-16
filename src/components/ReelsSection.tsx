@@ -1,21 +1,70 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Reel } from '../types';
 import { REELS, CREATOR_PROFILE } from '../data/creatorData';
+
 import {
-  Music2,
   Heart,
   MessageCircle,
   Instagram,
-  Volume2,
-  VolumeX,
   ExternalLink,
-  Play,
 } from 'lucide-react';
 
 interface ReelsSectionProps {
   onSelectReel: (reel: Reel) => void;
-  onOpenContact: () => void;
+  onOpenContact?: () => void;
 }
+
+/* ================================================================
+   INSTAGRAM HELPERS
+   ================================================================ */
+
+/**
+ * Extract Instagram Reel shortcode from:
+ *
+ * https://www.instagram.com/reel/DV3R9JxkR5E/
+ *
+ * or
+ *
+ * https://www.instagram.com/reel/DV3R9JxkR5E/?stkn=xxxx
+ */
+const getInstagramShortcode = (
+  reel: Reel
+): string | null => {
+  // First preference: explicit shortcode
+  if (reel.shortcode) {
+    return reel.shortcode;
+  }
+
+  // Otherwise extract it from instagramUrl
+  if (!reel.instagramUrl) {
+    return null;
+  }
+
+  const match = reel.instagramUrl.match(
+    /instagram\.com\/reel\/([^/?#]+)/
+  );
+
+  return match?.[1] || null;
+};
+
+/**
+ * Convert Instagram Reel URL into official embed URL.
+ */
+const getInstagramEmbedUrl = (
+  reel: Reel
+): string | null => {
+  const shortcode = getInstagramShortcode(reel);
+
+  if (!shortcode) {
+    return null;
+  }
+
+  return `https://www.instagram.com/reel/${shortcode}/embed/`;
+};
+
+/* ================================================================
+   COMPONENT
+   ================================================================ */
 
 export const ReelsSection: React.FC<ReelsSectionProps> = ({
   onSelectReel,
@@ -27,16 +76,9 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
   const [selectedCategory, setSelectedCategory] =
     useState<string>('All');
 
-  const [hoveredReelId, setHoveredReelId] =
-    useState<string | null>(null);
-
-  const [mutedStates, setMutedStates] = useState<
-    Record<string, boolean>
-  >({});
-
-  const videoRefs = useRef<
-    Record<string, HTMLVideoElement | null>
-  >({});
+  /* ================================================================
+     CATEGORIES
+     ================================================================ */
 
   const categories = [
     'All',
@@ -46,80 +88,24 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
     'Vlogs & Lifestyle',
   ];
 
+  /* ================================================================
+     FILTER
+     ================================================================ */
+
   const filteredReels =
     selectedCategory === 'All'
       ? REELS
       : REELS.filter(
-          (reel) => reel.category === selectedCategory
+          (reel) =>
+            reel.category === selectedCategory
         );
 
-  /*
-   * ============================================================
-   * INITIALIZE ALL VIDEOS AS MUTED
-   * ============================================================
-   */
-
-  useEffect(() => {
-    const initialMutedStates: Record<string, boolean> = {};
-
-    REELS.forEach((reel) => {
-      initialMutedStates[reel.id] = true;
-    });
-
-    setMutedStates(initialMutedStates);
-  }, []);
-
-  /*
-   * ============================================================
-   * INSTAGRAM SHORTCODE
-   * ============================================================
-   */
-
-  const getInstagramShortcode = (
-    reel: Reel
-  ): string | null => {
-    if (reel.shortcode) {
-      return reel.shortcode;
-    }
-
-    if (!reel.instagramUrl) {
-      return null;
-    }
-
-    const match = reel.instagramUrl.match(
-      /instagram\.com\/reel\/([^/?#]+)/
-    );
-
-    return match ? match[1] : null;
-  };
-
-  /*
-   * ============================================================
-   * INSTAGRAM EMBED URL
-   * ============================================================
-   */
-
-  const getInstagramEmbedUrl = (
-    reel: Reel
-  ): string | null => {
-    const shortcode =
-      getInstagramShortcode(reel);
-
-    if (!shortcode) {
-      return null;
-    }
-
-    return `https://www.instagram.com/reel/${shortcode}/embed/`;
-  };
-
-  /*
-   * ============================================================
-   * LIKE
-   * ============================================================
-   */
+  /* ================================================================
+     LIKE
+     ================================================================ */
 
   const handleLike = (
-    event: React.MouseEvent,
+    event: React.MouseEvent<HTMLButtonElement>,
     reelId: string
   ) => {
     event.stopPropagation();
@@ -130,190 +116,9 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
     }));
   };
 
-  /*
-   * ============================================================
-   * HOVER ENTER
-   *
-   * DEFAULT:
-   * Video is already playing muted.
-   *
-   * HOVER:
-   * Video continues playing.
-   * Sound attempts to turn ON.
-   * ============================================================
-   */
-
-  const handleMouseEnter = async (
-    reel: Reel
-  ) => {
-    if (!reel.videoUrl) {
-      return;
-    }
-
-    setHoveredReelId(reel.id);
-
-    const video =
-      videoRefs.current[reel.id];
-
-    if (!video) {
-      return;
-    }
-
-    try {
-      /*
-       * Turn sound ON.
-       */
-      video.muted = false;
-      video.volume = 1;
-
-      setMutedStates((previous) => ({
-        ...previous,
-        [reel.id]: false,
-      }));
-
-      /*
-       * Video should already be playing.
-       * If browser stopped it, resume it.
-       */
-      if (video.paused) {
-        await video.play();
-      }
-    } catch {
-      /*
-       * Browser autoplay policy can block
-       * unmuted playback.
-       *
-       * Keep the video playing muted.
-       */
-      video.muted = true;
-
-      setMutedStates((previous) => ({
-        ...previous,
-        [reel.id]: true,
-      }));
-
-      video.play().catch(() => {});
-    }
-  };
-
-  /*
-   * ============================================================
-   * HOVER LEAVE
-   *
-   * IMPORTANT:
-   * Video DOES NOT pause.
-   *
-   * Only sound is turned OFF.
-   * ============================================================
-   */
-
-  const handleMouseLeave = (
-    reel: Reel
-  ) => {
-    if (!reel.videoUrl) {
-      return;
-    }
-
-    setHoveredReelId(null);
-
-    const video =
-      videoRefs.current[reel.id];
-
-    if (!video) {
-      return;
-    }
-
-    /*
-     * Turn sound OFF.
-     */
-    video.muted = true;
-
-    setMutedStates((previous) => ({
-      ...previous,
-      [reel.id]: true,
-    }));
-
-    /*
-     * DO NOT pause.
-     *
-     * If for any reason browser paused it,
-     * start it again.
-     */
-    if (video.paused) {
-      video.play().catch(() => {});
-    }
-  };
-
-  /*
-   * ============================================================
-   * SOUND BUTTON
-   * ============================================================
-   */
-
-  const toggleSound = async (
-    event: React.MouseEvent,
-    reel: Reel
-  ) => {
-    event.stopPropagation();
-
-    if (!reel.videoUrl) {
-      return;
-    }
-
-    const video =
-      videoRefs.current[reel.id];
-
-    if (!video) {
-      return;
-    }
-
-    /*
-     * Currently muted -> turn sound ON.
-     */
-    if (video.muted) {
-      try {
-        video.muted = false;
-        video.volume = 1;
-
-        await video.play();
-
-        setMutedStates((previous) => ({
-          ...previous,
-          [reel.id]: false,
-        }));
-      } catch {
-        /*
-         * If browser blocks sound,
-         * remain muted.
-         */
-        video.muted = true;
-
-        setMutedStates((previous) => ({
-          ...previous,
-          [reel.id]: true,
-        }));
-      }
-
-      return;
-    }
-
-    /*
-     * Currently sound ON -> mute.
-     */
-    video.muted = true;
-
-    setMutedStates((previous) => ({
-      ...previous,
-      [reel.id]: true,
-    }));
-
-    /*
-     * Keep video playing.
-     */
-    if (video.paused) {
-      video.play().catch(() => {});
-    }
-  };
+  /* ================================================================
+     RENDER
+     ================================================================ */
 
   return (
     <section
@@ -332,9 +137,9 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
     >
       <div className="max-w-7xl mx-auto">
 
-        {/* ========================================================
+        {/* ==========================================================
             HEADER
-        ========================================================= */}
+        =========================================================== */}
 
         <div
           className="
@@ -349,6 +154,8 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
           "
         >
           <div className="max-w-2xl">
+
+            {/* Small Label */}
 
             <div
               className="
@@ -380,6 +187,8 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
               </span>
             </div>
 
+            {/* Title */}
+
             <div
               className="
                 flex
@@ -388,7 +197,6 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
               "
             >
               <h2
-                id="brand-reels-heading"
                 className="
                   text-4xl
                   sm:text-5xl
@@ -422,6 +230,8 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
               </span>
             </div>
 
+            {/* Description */}
+
             <p
               className="
                 mt-3
@@ -435,12 +245,11 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
               Explore selected collaborations, events,
               campaigns and lifestyle content.
             </p>
-
           </div>
 
-          {/* ======================================================
-              CATEGORY FILTER
-          ======================================================= */}
+          {/* ========================================================
+              CATEGORY FILTERS
+          ========================================================= */}
 
           <div
             className="
@@ -449,16 +258,24 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
               gap-2
               overflow-x-auto
               pb-1
-              scrollbar-hide
               -mx-4
               px-4
               sm:mx-0
               sm:px-0
+              scrollbar-hide
             "
           >
             {categories.map((category) => {
               const isActive =
                 selectedCategory === category;
+
+              const count =
+                category === 'All'
+                  ? REELS.length
+                  : REELS.filter(
+                      (reel) =>
+                        reel.category === category
+                    ).length;
 
               return (
                 <button
@@ -479,6 +296,7 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                     border
                     transition-all
                     duration-300
+
                     ${
                       isActive
                         ? `
@@ -497,18 +315,16 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                     }
                   `}
                 >
-                  {category === 'All'
-                    ? `All (${REELS.length})`
-                    : category}
+                  {category} ({count})
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* ========================================================
+        {/* ==========================================================
             REELS GRID
-        ========================================================= */}
+        =========================================================== */}
 
         <div
           className="
@@ -523,16 +339,7 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
         >
           {filteredReels.map((reel) => {
             const isLiked =
-              likedReelIds[reel.id] ?? false;
-
-            const isHovered =
-              hoveredReelId === reel.id;
-
-            const isMuted =
-              mutedStates[reel.id] ?? true;
-
-            const hasVideo =
-              Boolean(reel.videoUrl);
+              likedReelIds[reel.id] || false;
 
             const instagramEmbed =
               getInstagramEmbedUrl(reel);
@@ -540,7 +347,6 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
             return (
               <article
                 key={reel.id}
-                id={`reel-card-${reel.id}`}
                 className="
                   group
                   bg-white
@@ -573,6 +379,8 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                     border-[#F0E8E0]
                   "
                 >
+                  {/* Creator */}
+
                   <div
                     className="
                       flex
@@ -599,7 +407,6 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                         alt={
                           CREATOR_PROFILE.name
                         }
-                        referrerPolicy="no-referrer"
                         className="
                           w-full
                           h-full
@@ -626,7 +433,7 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                           "
                         >
                           {reel.collaboratorHandle ||
-                            `_${reel.creatorHandle}_`}
+                            CREATOR_PROFILE.instagramHandle}
                         </span>
 
                         <span
@@ -651,21 +458,14 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                           truncate
                         "
                       >
-                        <Music2
-                          className="
-                            w-2.5
-                            h-2.5
-                            shrink-0
-                          "
-                        />
-
                         <span className="truncate">
                           {reel.audioTrack}
                         </span>
                       </div>
-
                     </div>
                   </div>
+
+                  {/* Instagram Button */}
 
                   <a
                     href={
@@ -692,16 +492,14 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                       hover:text-[#9C5A4B]
                       transition-all
                     "
-                    aria-label="Open Instagram"
+                    aria-label="Open Instagram Reel"
                   >
-                    <Instagram
-                      className="w-4 h-4"
-                    />
+                    <Instagram className="w-4 h-4" />
                   </a>
                 </div>
 
                 {/* ==================================================
-                    MEDIA
+                    INSTAGRAM REEL
                 =================================================== */}
 
                 <div
@@ -711,258 +509,48 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                     w-full
                     overflow-hidden
                     bg-[#171513]
-                    cursor-pointer
                   "
-                  onClick={() =>
-                    onSelectReel(reel)
-                  }
-                  onMouseEnter={() =>
-                    handleMouseEnter(reel)
-                  }
-                  onMouseLeave={() =>
-                    handleMouseLeave(reel)
-                  }
                 >
 
-                  {/* ==================================================
-                      LOCAL MP4 VIDEO
-                  =================================================== */}
-
-                  {hasVideo ? (
-                    <>
-                      <video
-                        ref={(element) => {
-                          videoRefs.current[
-                            reel.id
-                          ] = element;
-                        }}
-                        src={reel.videoUrl}
-                        poster={reel.thumbnailUrl}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                        className={`
-                          absolute
-                          inset-0
-                          w-full
-                          h-full
-                          object-cover
-                          transition-transform
-                          duration-700
-                          ease-out
-                          ${
-                            isHovered
-                              ? 'scale-[1.025]'
-                              : 'scale-100'
-                          }
-                        `}
-                        onLoadedMetadata={(
-                          event
-                        ) => {
-                          const video =
-                            event.currentTarget;
-
-                          /*
-                           * Always begin muted.
-                           */
-                          video.muted = true;
-
-                          /*
-                           * Start immediately.
-                           */
-                          video
-                            .play()
-                            .catch(() => {});
-                        }}
-                      />
-
-                      {/* Top gradient */}
-
-                      <div
-                        className="
-                          absolute
-                          inset-x-0
-                          top-0
-                          h-32
-                          bg-gradient-to-b
-                          from-black/35
-                          to-transparent
-                          pointer-events-none
-                        "
-                      />
-
-                      {/* Bottom gradient */}
-
-                      <div
-                        className="
-                          absolute
-                          inset-x-0
-                          bottom-0
-                          h-56
-                          bg-gradient-to-t
-                          from-black/90
-                          via-black/35
-                          to-transparent
-                          pointer-events-none
-                        "
-                      />
-
-                      {/* =================================================
-                          SOUND BUTTON
-                      ================================================== */}
-
-                      <button
-                        type="button"
-                        onClick={(event) =>
-                          toggleSound(
-                            event,
-                            reel
-                          )
-                        }
-                        className="
-                          absolute
-                          top-4
-                          right-4
-                          z-30
-                          w-10
-                          h-10
-                          rounded-full
-                          bg-black/55
-                          backdrop-blur-md
-                          border
-                          border-white/20
-                          text-white
-                          flex
-                          items-center
-                          justify-center
-                          hover:bg-black/75
-                          hover:scale-105
-                          transition-all
-                        "
-                        aria-label={
-                          isMuted
-                            ? 'Turn sound on'
-                            : 'Mute video'
-                        }
-                      >
-                        {isMuted ? (
-                          <VolumeX
-                            className="w-4 h-4"
-                          />
-                        ) : (
-                          <Volume2
-                            className="w-4 h-4"
-                          />
-                        )}
-                      </button>
-
-                      {/* =================================================
-                          HOVER SOUND MESSAGE
-                      ================================================== */}
-
-                      <div
-                        className={`
-                          absolute
-                          left-1/2
-                          top-1/2
-                          -translate-x-1/2
-                          -translate-y-1/2
-                          z-20
-                          pointer-events-none
-                          transition-all
-                          duration-300
-                          ${
-                            isHovered &&
-                            !isMuted
-                              ? 'opacity-100 scale-100'
-                              : 'opacity-0 scale-90'
-                          }
-                        `}
-                      >
-                        <div
-                          className="
-                            flex
-                            items-center
-                            gap-2
-                            px-4
-                            py-2.5
-                            rounded-full
-                            bg-black/60
-                            backdrop-blur-md
-                            border
-                            border-white/20
-                            text-white
-                            text-[11px]
-                            font-medium
-                          "
-                        >
-                          <Volume2
-                            className="w-3.5 h-3.5"
-                          />
-
-                          Sound On
-                        </div>
-                      </div>
-                    </>
-                  ) : instagramEmbed ? (
-
-                    /* ==================================================
-                       INSTAGRAM EMBED
-                    =================================================== */
-
-                    <div
+                  {instagramEmbed ? (
+                    <iframe
+                      src={instagramEmbed}
+                      title={`Instagram Reel - ${reel.title}`}
                       className="
                         absolute
                         inset-0
-                        bg-white
+                        w-full
+                        h-full
+                        border-0
                       "
-                      onClick={(event) =>
-                        event.stopPropagation()
-                      }
-                    >
-                      <iframe
-                        src={instagramEmbed}
-                        title={reel.title}
-                        className="
-                          absolute
-                          inset-0
-                          w-full
-                          h-full
-                          border-0
-                        "
-                        frameBorder="0"
-                        scrolling="no"
-                        allow="
-                          autoplay;
-                          clipboard-write;
-                          encrypted-media;
-                          picture-in-picture;
-                          web-share
-                        "
-                        allowFullScreen
-                      />
-                    </div>
-
+                      frameBorder="0"
+                      scrolling="no"
+                      allow="
+                        autoplay;
+                        clipboard-write;
+                        encrypted-media;
+                        picture-in-picture;
+                        web-share
+                      "
+                      allowFullScreen
+                    />
                   ) : (
-
-                    /* ==================================================
-                       FALLBACK IMAGE
-                    =================================================== */
-
-                    <div
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onSelectReel(reel)
+                      }
                       className="
                         absolute
                         inset-0
+                        w-full
+                        h-full
+                        cursor-pointer
                       "
                     >
                       <img
-                        src={
-                          reel.thumbnailUrl
-                        }
+                        src={reel.thumbnailUrl}
                         alt={reel.title}
-                        referrerPolicy="no-referrer"
                         className="
                           w-full
                           h-full
@@ -977,89 +565,56 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                         className="
                           absolute
                           inset-0
-                          bg-black/20
+                          bg-black/25
                         "
                       />
-
-                      <div
-                        className="
-                          absolute
-                          inset-0
-                          flex
-                          items-center
-                          justify-center
-                        "
-                      >
-                        <div
-                          className="
-                            w-14
-                            h-14
-                            rounded-full
-                            bg-white/90
-                            shadow-xl
-                            flex
-                            items-center
-                            justify-center
-                          "
-                        >
-                          <Play
-                            className="
-                              w-5
-                              h-5
-                              ml-0.5
-                              text-[#1A1816]
-                              fill-[#1A1816]
-                            "
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    </button>
                   )}
 
                   {/* ==================================================
                       INSTAGRAM BADGE
                   =================================================== */}
 
-                  <div
-                    className="
-                      absolute
-                      top-4
-                      left-4
-                      z-20
-                      pointer-events-none
-                    "
-                  >
+                  {instagramEmbed && (
                     <div
                       className="
-                        flex
-                        items-center
-                        gap-1.5
-                        px-3
-                        py-1.5
-                        rounded-full
-                        bg-black/50
-                        backdrop-blur-md
-                        border
-                        border-white/20
-                        text-white
+                        absolute
+                        top-4
+                        left-4
+                        z-20
+                        pointer-events-none
                       "
                     >
-                      <Instagram
-                        className="w-3 h-3"
-                      />
-
-                      <span
+                      <div
                         className="
-                          text-[9px]
-                          font-semibold
-                          tracking-[0.12em]
-                          uppercase
+                          flex
+                          items-center
+                          gap-1.5
+                          px-3
+                          py-1.5
+                          rounded-full
+                          bg-black/55
+                          backdrop-blur-md
+                          border
+                          border-white/20
+                          text-white
                         "
                       >
-                        Instagram Reel
-                      </span>
+                        <Instagram className="w-3 h-3" />
+
+                        <span
+                          className="
+                            text-[9px]
+                            font-semibold
+                            tracking-[0.12em]
+                            uppercase
+                          "
+                        >
+                          Instagram Reel
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* ==================================================
                       ACTION BUTTONS
@@ -1069,13 +624,16 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                     className="
                       absolute
                       right-4
-                      bottom-20
-                      z-20
+                      bottom-5
+                      z-30
                       flex
                       flex-col
                       gap-2
                     "
                   >
+
+                    {/* LIKE */}
+
                     <button
                       type="button"
                       onClick={(event) =>
@@ -1088,7 +646,7 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                         w-10
                         h-10
                         rounded-full
-                        bg-black/55
+                        bg-black/60
                         backdrop-blur-md
                         border
                         border-white/20
@@ -1096,7 +654,7 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                         flex
                         items-center
                         justify-center
-                        hover:bg-black/75
+                        hover:bg-black/80
                         hover:scale-105
                         transition-all
                       "
@@ -1107,6 +665,7 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                           w-4
                           h-4
                           transition-all
+
                           ${
                             isLiked
                               ? 'text-rose-400 fill-rose-400 scale-110'
@@ -1115,6 +674,8 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                         `}
                       />
                     </button>
+
+                    {/* COMMENTS */}
 
                     <button
                       type="button"
@@ -1125,7 +686,7 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                         w-10
                         h-10
                         rounded-full
-                        bg-black/55
+                        bg-black/60
                         backdrop-blur-md
                         border
                         border-white/20
@@ -1133,20 +694,18 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                         flex
                         items-center
                         justify-center
-                        hover:bg-black/75
+                        hover:bg-black/80
                         hover:scale-105
                         transition-all
                       "
                       aria-label="Comments"
                     >
-                      <MessageCircle
-                        className="w-4 h-4"
-                      />
+                      <MessageCircle className="w-4 h-4" />
                     </button>
                   </div>
 
                   {/* ==================================================
-                      TITLE / CAPTION
+                      BOTTOM OVERLAY
                   =================================================== */}
 
                   <div
@@ -1155,18 +714,21 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                       left-0
                       right-0
                       bottom-0
-                      z-10
+                      z-20
                       p-4
                       pr-16
                       pointer-events-none
+                      bg-gradient-to-t
+                      from-black/85
+                      via-black/30
+                      to-transparent
+                      pt-24
                     "
                   >
                     {reel.brandTag && (
                       <span
                         className="
                           inline-block
-                          max-w-[160px]
-                          truncate
                           mb-2
                           px-2.5
                           py-1
@@ -1192,28 +754,15 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                         leading-snug
                         text-white
                         line-clamp-2
-                        drop-shadow-lg
                       "
                     >
                       {reel.title}
                     </h3>
-
-                    <p
-                      className="
-                        mt-1
-                        text-[10px]
-                        sm:text-[11px]
-                        text-white/75
-                        line-clamp-1
-                      "
-                    >
-                      {reel.caption}
-                    </p>
                   </div>
                 </div>
 
                 {/* ==================================================
-                    FOOTER
+                    CARD FOOTER
                 =================================================== */}
 
                 <div
@@ -1265,7 +814,7 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                             font-medium
                             text-[#5E544B]
                             truncate
-                            max-w-[100px]
+                            max-w-[110px]
                           "
                         >
                           {reel.brandTag}
@@ -1274,44 +823,66 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
                     )}
                   </div>
 
-                  <a
-                    href={
-                      reel.instagramUrl ||
-                      CREATOR_PROFILE.instagramUrl
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(event) =>
-                      event.stopPropagation()
-                    }
-                    className="
-                      flex
-                      items-center
-                      gap-1
-                      shrink-0
-                      text-[10px]
-                      font-semibold
-                      text-[#9C5A4B]
-                      hover:text-[#7D4438]
-                      transition-colors
-                    "
-                  >
-                    Open Reel
+                  {/* ==================================================
+                      VIEW REEL
+                  =================================================== */}
 
-                    <ExternalLink
-                      className="w-3 h-3"
-                    />
-                  </a>
+                  {reel.instagramUrl ? (
+                    <a
+                      href={reel.instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(event) =>
+                        event.stopPropagation()
+                      }
+                      className="
+                        flex
+                        items-center
+                        gap-1
+                        shrink-0
+                        text-[10px]
+                        font-semibold
+                        text-[#9C5A4B]
+                        hover:text-[#7D4438]
+                        transition-colors
+                      "
+                    >
+                      View Reel
+
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onSelectReel(reel)
+                      }
+                      className="
+                        flex
+                        items-center
+                        gap-1
+                        shrink-0
+                        text-[10px]
+                        font-semibold
+                        text-[#9C5A4B]
+                        hover:text-[#7D4438]
+                        transition-colors
+                      "
+                    >
+                      View Details
+
+                      <ExternalLink className="w-3 h-3" />
+                    </button>
+                  )}
                 </div>
-
               </article>
             );
           })}
         </div>
 
-        {/* ========================================================
+        {/* ==========================================================
             EMPTY STATE
-        ========================================================= */}
+        =========================================================== */}
 
         {filteredReels.length === 0 && (
           <div
@@ -1381,3 +952,5 @@ export const ReelsSection: React.FC<ReelsSectionProps> = ({
     </section>
   );
 };
+
+export default ReelsSection;
