@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CREATOR_PROFILE } from '../data/creatorData';
 import { Play } from 'lucide-react';
@@ -15,14 +16,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     <section
       className="
         relative
+        overflow-hidden
         px-4
+        xs:px-5
         sm:px-8
         lg:px-20
-        pt-6
+        pt-5
         sm:pt-12
-        pb-14
-        sm:pb-24
-        overflow-hidden
+        lg:pt-16
+        pb-12
+        sm:pb-20
+        lg:pb-24
       "
     >
       <div className="max-w-7xl mx-auto">
@@ -32,6 +36,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             grid-cols-1
             lg:grid-cols-12
             gap-10
+            sm:gap-12
             lg:gap-16
             items-center
           "
@@ -47,7 +52,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               flex
               flex-col
               justify-center
-              text-left
+              text-center
+              lg:text-left
               order-1
             "
           >
@@ -57,14 +63,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <span
               id="hero-eyebrow"
               className="
-                text-[11px]
+                block
+                text-[9px]
+                xs:text-[10px]
                 sm:text-xs
                 font-medium
-                tracking-[0.2em]
+                tracking-[0.16em]
+                xs:tracking-[0.2em]
                 sm:tracking-[0.26em]
                 uppercase
                 text-[#B56B5A]
-                block
+                leading-relaxed
               "
             >
               C O N T E N T &nbsp; C R E A T O R
@@ -78,17 +87,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               id="hero-title"
               className="
                 mt-3
-                sm:mt-6
-                text-4xl
+                sm:mt-5
+                lg:mt-6
+                text-[42px]
+                xs:text-[46px]
                 sm:text-6xl
                 md:text-7xl
                 lg:text-[88px]
                 font-serif
                 font-normal
                 text-[#1A1816]
-                tracking-tight
-                leading-[1.1]
-                sm:leading-[1.05]
+                tracking-[-0.035em]
+                leading-[0.98]
+                sm:leading-[1.02]
               "
             >
               Ankita Bhadra
@@ -101,14 +112,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               id="hero-bio"
               className="
                 mt-4
-                sm:mt-7
-                text-base
+                sm:mt-6
+                lg:mt-7
+                mx-auto
+                lg:mx-0
+                text-[14px]
+                xs:text-[15px]
                 sm:text-lg
                 lg:text-xl
                 text-[#4A433D]
                 font-light
-                leading-relaxed
-                max-w-xl
+                leading-[1.7]
+                sm:leading-relaxed
+                max-w-[340px]
+                sm:max-w-xl
               "
             >
               I’m Ankita Bhadra — a content creator
@@ -122,17 +139,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             <div
               className="
-                mt-7
-                sm:mt-10
+                mt-6
+                sm:mt-9
                 flex
                 flex-col
-                sm:flex-row
+                xs:flex-row
+                lg:flex-row
                 items-stretch
-                sm:items-center
+                xs:items-center
+                justify-center
+                lg:justify-start
                 gap-3
                 sm:gap-4
                 w-full
-                sm:w-auto
+                xs:w-auto
               "
             >
 
@@ -142,9 +162,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onClick={onExploreReels}
                 className="
                   w-full
-                  sm:w-auto
-                  min-h-[46px]
+                  xs:w-auto
+                  min-h-[48px]
                   px-6
+                  sm:px-7
                   py-3
                   rounded-full
                   bg-[#1A1816]
@@ -153,6 +174,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   sm:text-sm
                   font-medium
                   hover:bg-[#332E29]
+                  active:scale-[0.98]
                   transition-all
                   cursor-pointer
                   shadow-sm
@@ -164,11 +186,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 "
               >
                 <Play
-                  className="
-                    w-3.5
-                    h-3.5
-                    fill-current
-                  "
+                  className="w-3.5 h-3.5 fill-current"
                 />
 
                 <span>
@@ -183,9 +201,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onClick={onOpenContact}
                 className="
                   w-full
-                  sm:w-auto
-                  min-h-[46px]
+                  xs:w-auto
+                  min-h-[48px]
                   px-6
+                  sm:px-7
                   py-3
                   rounded-full
                   border
@@ -195,7 +214,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   sm:text-sm
                   font-medium
                   hover:bg-[#EFE8DF]
-                  transition-colors
+                  active:scale-[0.98]
+                  transition-all
                   cursor-pointer
                   flex
                   items-center
@@ -213,18 +233,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             <p
               className="
-                mt-8
-                sm:mt-12
-                text-[11px]
+                mt-7
+                sm:mt-11
+                text-[9px]
+                xs:text-[10px]
                 sm:text-xs
-                tracking-wider
+                tracking-[0.12em]
+                sm:tracking-wider
                 text-[#8A7D71]
                 uppercase
                 font-medium
+                leading-relaxed
               "
             >
               Brand integrations & stage emceeing
-              across India
+              <span className="hidden xs:inline"> across India</span>
+              <span className="xs:hidden block mt-1">
+                across India
+              </span>
             </p>
 
           </div>
@@ -241,7 +267,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               justify-center
               lg:justify-end
               order-2
-              mt-4
+              mt-1
+              sm:mt-3
               lg:mt-0
             "
           >
@@ -250,42 +277,45 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               className="
                 relative
                 w-full
-                max-w-[290px]
+                max-w-[245px]
+                xs:max-w-[270px]
                 sm:max-w-[330px]
                 md:max-w-[360px]
               "
             >
 
-              {/* ======================================================
-                  SOFT BACKGROUND SHAPE
-              ======================================================= */}
+              {/* SOFT BACKGROUND SHAPE */}
 
               <div
                 className="
                   absolute
-                  -inset-5
+                  -inset-3
+                  xs:-inset-4
                   sm:-inset-7
                   bg-[#EFE8DF]
-                  rounded-[55px]
+                  rounded-[38px]
+                  xs:rounded-[48px]
                   sm:rounded-[70px]
                   -z-10
                 "
               />
 
 
-              {/* ======================================================
-                  DECORATIVE BACK FRAME
-              ======================================================= */}
+              {/* DECORATIVE BACK FRAME */}
 
               <div
                 className="
                   absolute
-                  -right-3
+                  -right-2
+                  xs:-right-3
                   sm:-right-5
-                  top-5
-                  bottom-5
+                  top-4
+                  sm:top-5
+                  bottom-4
+                  sm:bottom-5
                   w-full
-                  rounded-[32px]
+                  rounded-[26px]
+                  xs:rounded-[32px]
                   sm:rounded-[42px]
                   border
                   border-[#D9CCBE]
@@ -294,21 +324,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               />
 
 
-              {/* ======================================================
-                  MAIN PHOTO FRAME
-              ======================================================= */}
+              {/* MAIN PHOTO FRAME */}
 
               <div
                 className="
                   relative
                   bg-[#F8F3ED]
-                  p-2.5
+                  p-2
+                  xs:p-2.5
                   sm:p-3
-                  rounded-[32px]
+                  rounded-[27px]
+                  xs:rounded-[32px]
                   sm:rounded-[40px]
                   border
                   border-[#D9CEBF]
-                  shadow-[0_25px_70px_rgba(55,43,35,0.16)]
+                  shadow-[0_18px_50px_rgba(55,43,35,0.14)]
+                  sm:shadow-[0_25px_70px_rgba(55,43,35,0.16)]
                 "
               >
 
@@ -319,7 +350,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     relative
                     aspect-[4/5]
                     w-full
-                    rounded-[25px]
+                    rounded-[21px]
+                    xs:rounded-[25px]
                     sm:rounded-[32px]
                     overflow-hidden
                     bg-[#E8DED4]
@@ -343,14 +375,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       transition-transform
                       duration-700
                       ease-out
-                      group-hover:scale-105
                     "
                   />
 
 
-                  {/* ==================================================
-                      BOTTOM GRADIENT
-                  =================================================== */}
+                  {/* BOTTOM GRADIENT */}
 
                   <div
                     className="
@@ -361,9 +390,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       from-black/80
                       via-black/30
                       to-transparent
-                      pt-24
-                      pb-5
-                      px-5
+                      pt-20
+                      xs:pt-24
+                      sm:pt-24
+                      pb-4
+                      xs:pb-5
+                      px-4
+                      xs:px-5
                       text-white
                     "
                   >
@@ -373,13 +406,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                         flex
                         items-center
                         gap-2
-                        mb-1.5
+                        mb-1
                       "
                     >
 
                       <span
                         className="
-                          text-xs
+                          text-[11px]
+                          xs:text-xs
                           sm:text-sm
                           font-semibold
                         "
@@ -393,6 +427,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                           h-1.5
                           rounded-full
                           bg-emerald-400
+                          flex-shrink-0
                         "
                       />
 
@@ -400,7 +435,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
                     <p
                       className="
-                        text-[10px]
+                        text-[9px]
+                        xs:text-[10px]
                         sm:text-xs
                         text-white/80
                         font-light
@@ -416,18 +452,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
 
 
-              {/* ======================================================
-                  SMALL DECORATIVE ELEMENT
-              ======================================================= */}
+              {/* SMALL DECORATIVE ELEMENT */}
 
               <div
                 className="
                   absolute
-                  -bottom-4
-                  -left-4
+                  -bottom-2
+                  -left-2
+                  xs:-bottom-3
+                  xs:-left-3
+                  sm:-bottom-4
                   sm:-left-6
-                  w-16
-                  h-16
+                  w-10
+                  h-10
+                  xs:w-14
+                  xs:h-14
                   sm:w-20
                   sm:h-20
                   rounded-full
