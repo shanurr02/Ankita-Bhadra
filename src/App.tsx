@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Reel } from './types';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
-import { ReelsSection } from './components/ReelsSection';
+import ReelsSection  from './components/ReelsSection';
 import { FAQSection } from './components/FAQSection';
 import { ContactModal } from './components/ContactModal';
 import { ReelModal } from './components/ReelModal';
 import { Footer } from './components/Footer';
+import { BrandsMarquee } from './components/BrandsMarquee';
 
 export default function App() {
   const [selectedReel, setSelectedReel] = useState<Reel | null>(null);
@@ -34,13 +35,13 @@ export default function App() {
 
         {/* Brand Reels Showcase */}
         <ReelsSection
-          onSelectReel={reel => setSelectedReel(reel)}
-          onOpenContact={() => setIsContactOpen(true)}
+       
         />
-
+ <BrandsMarquee />
         {/* Minimalist Logistics & Booking FAQ */}
         <FAQSection onOpenContact={() => setIsContactOpen(true)} />
       </main>
+      
 
       {/* Minimalist Footer */}
       <Footer onOpenContact={() => setIsContactOpen(true)} />
