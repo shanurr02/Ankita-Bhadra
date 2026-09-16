@@ -1,57 +1,102 @@
-import React, { useState } from 'react';
-import { Reel } from './types';
-import { Navbar } from './components/Navbar';
-import { HeroSection } from './components/HeroSection';
-import ReelsSection  from './components/ReelsSection';
-import { FAQSection } from './components/FAQSection';
-import  ContactModal  from './components/ContactModal';
-import { ReelModal } from './components/ReelModal';
-import { Footer } from './components/Footer';
-import { BrandsMarquee } from './components/BrandsMarquee';
+import React, { useState } from "react";
+import { Reel } from "./types";
+import { Navbar } from "./components/Navbar";
+import { HeroSection } from "./components/HeroSection";
+import ReelsSection from "./components/ReelsSection";
+import ContactModal from "./components/ContactModal";
+import { ReelModal } from "./components/ReelModal";
+import { Footer } from "./components/Footer";
+import { BrandsMarquee } from "./components/BrandsMarquee";
 
 export default function App() {
-  const [selectedReel, setSelectedReel] = useState<Reel | null>(null);
-  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [selectedReel, setSelectedReel] =
+    useState<Reel | null>(null);
+
+  const [isContactOpen, setIsContactOpen] =
+    useState(false);
 
   const handleExploreReels = () => {
-    const el = document.getElementById('brand-reels');
+    const el = document.getElementById("brand-reels");
+
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      el.scrollIntoView({
+        behavior: "smooth",
+      });
     }
   };
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-[#F8F4EE] text-[#1A1816] flex flex-col font-sans selection:bg-[#E8C5B8] selection:text-[#1A1816]">
-      {/* Minimal Top Header */}
-      <Navbar onOpenContact={() => setIsContactOpen(true)} />
+    <div
+      className="
+        flex
+        min-h-screen
+        w-full
+        flex-col
+        overflow-x-hidden
+        bg-[#F8F4EE]
+        font-sans
+        text-[#1A1816]
+        selection:bg-[#E8C5B8]
+        selection:text-[#1A1816]
+      "
+    >
+      {/* ============================================================
+          NAVBAR
+          Desktop only
+          Hidden completely on mobile
+      ============================================================ */}
 
-      {/* Main Content Flow */}
+      <div className="hidden sm:block">
+        <Navbar
+          onOpenContact={() =>
+            setIsContactOpen(true)
+          }
+        />
+      </div>
+
+      {/* ============================================================
+          MAIN CONTENT
+      ============================================================ */}
+
       <main className="flex-1">
-        {/* Hero Section */}
+        {/* HERO */}
         <HeroSection
-          onOpenContact={() => setIsContactOpen(true)}
+          onOpenContact={() =>
+            setIsContactOpen(true)
+          }
           onExploreReels={handleExploreReels}
         />
 
-        {/* Brand Reels Showcase */}
-        <ReelsSection
-       
-        />
- <BrandsMarquee />
-        {/* Minimalist Logistics & Booking FAQ */}
-        {/* <FAQSection onOpenContact={() => setIsContactOpen(true)} /> */}
+        {/* REELS */}
+        <ReelsSection />
+
+        {/* BRANDS */}
+        <BrandsMarquee />
       </main>
-      
 
-      {/* Minimalist Footer */}
-      <Footer onOpenContact={() => setIsContactOpen(true)} />
+      {/* ============================================================
+          FOOTER
+      ============================================================ */}
 
-      {/* Interactive Reel Viewer Modal */}
+      <Footer
+        onOpenContact={() =>
+          setIsContactOpen(true)
+        }
+      />
+
+      {/* ============================================================
+          REEL MODAL
+      ============================================================ */}
+
       {selectedReel && (
         <ReelModal
           reel={selectedReel}
-          onClose={() => setSelectedReel(null)}
-          onSelectReel={reel => setSelectedReel(reel)}
+          onClose={() =>
+            setSelectedReel(null)
+          }
+          onSelectReel={(reel) =>
+            setSelectedReel(reel)
+          }
           onOpenContact={() => {
             setSelectedReel(null);
             setIsContactOpen(true);
@@ -59,11 +104,16 @@ export default function App() {
         />
       )}
 
-      {/* Quick Collaboration Modal */}
+      {/* ============================================================
+          CONTACT MODAL
+      ============================================================ */}
+
       {isContactOpen && (
         <ContactModal
           isOpen={isContactOpen}
-          onClose={() => setIsContactOpen(false)}
+          onClose={() =>
+            setIsContactOpen(false)
+          }
         />
       )}
     </div>

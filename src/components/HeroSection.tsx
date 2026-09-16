@@ -384,7 +384,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                           font-semibold
                         "
                       >
-                        @{CREATOR_PROFILE.instagramHandle}
+                        @Ankita Bhadra
                       </span>
 
                       <span

@@ -29,7 +29,7 @@ const CREATOR = {
   name: 'Ankita Bhadra',
   username: '__bhadra___',
   instagramUrl: 'https://www.instagram.com/__bhadra___/',
-  profileImage: '/assets/images/profile.JPEG',
+  profileImage: '/assets/images/1.jpeg',
 };
 
 /* ================================================================
@@ -38,9 +38,9 @@ const CREATOR = {
 
 const INSTAGRAM_REELS: InstagramReel[] = [
   {
-    id: 'reel-dv3',
-    shortcode: 'DV3R9JxkR5E',
-    url: 'https://www.instagram.com/reel/DV3R9JxkR5E/',
+    id: 'reel-dcs',
+    shortcode: 'DcsxZLHT0xs',
+    url: 'https://www.instagram.com/reel/DcsxZLHT0xs/',
     title: 'Instagram Reel',
     caption:
       'Watch Ankita Bhadra on Instagram. Open the Reel to explore the original content and engagement.',
@@ -48,18 +48,7 @@ const INSTAGRAM_REELS: InstagramReel[] = [
     date: 'Latest',
     brand: '',
   },
-
-  {
-    id: 'reel-dbq',
-    shortcode: 'DbqszA3zpLX',
-    url: 'https://www.instagram.com/reel/DbqszA3zpLX/',
-    title: 'Instagram Reel',
-    caption:
-      'Watch Ankita Bhadra on Instagram. Open the Reel to explore the original content and engagement.',
-    category: 'Instagram Reels',
-    date: 'Latest',
-    brand: '',
-  },
+ 
 
   {
     id: 'reel-dz5',
@@ -85,17 +74,7 @@ const INSTAGRAM_REELS: InstagramReel[] = [
     brand: '',
   },
 
-  {
-    id: 'reel-dcs',
-    shortcode: 'DcsxZLHT0xs',
-    url: 'https://www.instagram.com/reel/DcsxZLHT0xs/',
-    title: 'Instagram Reel',
-    caption:
-      'Watch Ankita Bhadra on Instagram. Open the Reel to explore the original content and engagement.',
-    category: 'Instagram Reels',
-    date: 'Latest',
-    brand: '',
-  },
+ 
 
   {
     id: 'reel-dcg',
@@ -137,6 +116,30 @@ const INSTAGRAM_REELS: InstagramReel[] = [
     id: 'reel-dwj',
     shortcode: 'DWjNN_6EZse',
     url: 'https://www.instagram.com/reel/DWjNN_6EZse/',
+    title: 'Instagram Reel',
+    caption:
+      'Watch Ankita Bhadra on Instagram. Open the Reel to explore the original content and engagement.',
+    category: 'Instagram Reels',
+    date: 'Latest',
+    brand: '',
+  },
+
+    {
+    id: 'reel-dv3',
+    shortcode: 'DV3R9JxkR5E',
+    url: 'https://www.instagram.com/reel/DV3R9JxkR5E/',
+    title: 'Instagram Reel',
+    caption:
+      'Watch Ankita Bhadra on Instagram. Open the Reel to explore the original content and engagement.',
+    category: 'Instagram Reels',
+    date: 'Latest',
+    brand: '',
+  },
+
+  {
+    id: 'reel-dbq',
+    shortcode: 'DbqszA3zpLX',
+    url: 'https://www.instagram.com/reel/DbqszA3zpLX/',
     title: 'Instagram Reel',
     caption:
       'Watch Ankita Bhadra on Instagram. Open the Reel to explore the original content and engagement.',
@@ -686,37 +689,6 @@ const ReelsSection: React.FC = () => {
 
           {/* PROFILE BUTTON */}
 
-          <a
-            href={CREATOR.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              self-start
-              lg:self-auto
-              inline-flex
-              items-center
-              gap-2
-              px-5
-              py-2.5
-              rounded-full
-              bg-[#1A1816]
-              text-white
-              text-xs
-              font-semibold
-              hover:bg-[#302C29]
-              hover:-translate-y-0.5
-              transition-all
-              shadow-sm
-            "
-          >
-            <Instagram className="w-4 h-4" />
-
-            <span>
-              @{CREATOR.username}
-            </span>
-
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
         </div>
 
         {/* ==========================================================

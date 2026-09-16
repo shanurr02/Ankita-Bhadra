@@ -38,15 +38,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
 
 
 
-          <a
-            href={CREATOR_PROFILE.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center space-x-1.5 text-[#8A564A] hover:text-[#1A1816] transition-colors py-1"
-          >
-            <Instagram className="w-3.5 h-3.5" />
-            <span>@{CREATOR_PROFILE.instagramHandle}</span>
-          </a>
+         
 
           <button
             onClick={onOpenContact}

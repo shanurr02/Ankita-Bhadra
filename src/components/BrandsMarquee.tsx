@@ -408,38 +408,7 @@ export const BrandsMarquee: React.FC = () => {
               TRUST MESSAGE
           ======================================================== */}
 
-          <div
-            className="
-              mt-5
-              flex
-              items-center
-              justify-center
-              gap-2
-              px-4
-              text-center
-              sm:mt-7
-            "
-          >
-            <ShieldCheck
-              className="
-                h-4
-                w-4
-                shrink-0
-                text-[#B56B5A]
-              "
-            />
-
-            <span
-              className="
-                text-[10px]
-                text-[#706458]
-                sm:text-xs
-              "
-            >
-              Authentic Audience · Organic Engagement ·
-              Brand-safe collaborations
-            </span>
-          </div>
+         
         </div>
       </section>
     </>
