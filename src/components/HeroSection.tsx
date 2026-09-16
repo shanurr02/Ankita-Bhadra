@@ -384,7 +384,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                           font-semibold
                         "
                       >
-                        @Ankita Bhadra
+                        Ankita Bhadra
                       </span>
 
                       <span
