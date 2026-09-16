@@ -4,7 +4,7 @@ import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import ReelsSection  from './components/ReelsSection';
 import { FAQSection } from './components/FAQSection';
-import { ContactModal } from './components/ContactModal';
+import  ContactModal  from './components/ContactModal';
 import { ReelModal } from './components/ReelModal';
 import { Footer } from './components/Footer';
 import { BrandsMarquee } from './components/BrandsMarquee';
@@ -39,7 +39,7 @@ export default function App() {
         />
  <BrandsMarquee />
         {/* Minimalist Logistics & Booking FAQ */}
-        <FAQSection onOpenContact={() => setIsContactOpen(true)} />
+        {/* <FAQSection onOpenContact={() => setIsContactOpen(true)} /> */}
       </main>
       
 

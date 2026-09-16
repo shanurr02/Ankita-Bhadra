@@ -45,7 +45,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
 
       <div className="max-w-7xl mx-auto mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-[#E8DFC2]/80 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-[#827568] gap-3 text-center sm:text-left">
         <span>© {new Date().getFullYear()} Ankita Bhadra. All rights reserved.</span>
-        <span>Content Creator · Anchor · Mumbai & Kolkata</span>
+        <span>Content Creator · Anchor </span>
       </div>
     </footer>
   );

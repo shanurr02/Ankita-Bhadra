@@ -1,76 +1,152 @@
-import React, { useState } from 'react';
-import { CREATOR_PROFILE } from '../data/creatorData';
+import React, { useEffect, useState } from "react";
 import {
   X,
-  Instagram,
   MessageCircle,
-  ArrowUpRight,
-} from 'lucide-react';
+  Instagram,
+  Video,
+  Handshake,
+  CalendarDays,
+  Smartphone,
+  Mic2,
+  Camera,
+  Sparkles,
+  Megaphone,
+  MoreHorizontal,
+  Check,
+  ArrowRight,
+} from "lucide-react";
+
+const CREATOR_PROFILE = {
+  name: "Ankita Bhadra",
+  instagram: "__bhadra___",
+};
+
+const WHATSAPP_NUMBER = "918787857617";
+
+const PROJECT_OPTIONS = [
+  {
+    id: "short-reel",
+    title: "Short Reel",
+    icon: Video,
+  },
+  {
+    id: "collaboration",
+    title: "Collaboration",
+    icon: Handshake,
+  },
+  {
+    id: "monthly-package",
+    title: "Monthly Package",
+    icon: CalendarDays,
+  },
+  {
+    id: "ugc-content",
+    title: "UGC Content",
+    icon: Smartphone,
+  },
+  {
+    id: "event-hosting",
+    title: "Event / Hosting",
+    icon: Mic2,
+  },
+  {
+    id: "product-shoot",
+    title: "Product Shoot",
+    icon: Camera,
+  },
+  {
+    id: "beauty-fashion",
+    title: "Beauty / Fashion",
+    icon: Sparkles,
+  },
+  {
+    id: "brand-promotion",
+    title: "Brand Promotion",
+    icon: Megaphone,
+  },
+  {
+    id: "other",
+    title: "Something Else",
+    icon: MoreHorizontal,
+  },
+];
 
 interface ContactModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-/* ================================================================
-   WHATSAPP NUMBER
-   IMPORTANT:
-   Add country code without +, spaces or hyphens.
-   
-   Example:
-   919876543210
-   ================================================================ */
-
-const WHATSAPP_NUMBER = '919XXXXXXXXX';
-
-/* ================================================================
-   COMPONENT
-   ================================================================ */
-
-export const ContactModal: React.FC<ContactModalProps> = ({
+const ContactModal: React.FC<ContactModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
+  const [selectedOption, setSelectedOption] =
+    useState("collaboration");
 
-  if (!isOpen) {
-    return null;
-  }
+  /* ----------------------------------
+     BODY SCROLL LOCK
+  ---------------------------------- */
+  useEffect(() => {
+    if (!isOpen) return;
 
-  /* ================================================================
-     WHATSAPP CONNECT
-     ================================================================ */
+    const originalOverflow = document.body.style.overflow;
 
-  const handleWhatsApp = (
-    event: React.FormEvent
-  ) => {
-    event.preventDefault();
+    document.body.style.overflow = "hidden";
 
-    const cleanName = name.trim();
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
 
-    if (!cleanName) {
-      return;
-    }
+    document.addEventListener("keydown", handleEscape);
 
-    /*
-     * First WhatsApp message.
-     *
-     * Example:
-     * Hi Ankita, my name is Rahul. I’d like to connect regarding a collaboration.
-     */
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  const selectedProject = PROJECT_OPTIONS.find(
+    (option) => option.id === selectedOption
+  );
+
+  const projectName =
+    selectedProject?.title || "Collaboration";
+
+  /* ----------------------------------
+     WHATSAPP
+  ---------------------------------- */
+  const handleWhatsApp = () => {
+    const cleanName = name.trim() || "there";
 
     const message =
-      `Hi Ankita, my name is ${cleanName}. I’d like to connect regarding a collaboration.`;
+      `Hi Ankita, my name is ${cleanName}. ` +
+      `I'm interested in ${projectName}. ` +
+      `I'd like to discuss the details with you.`;
 
     const whatsappUrl =
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-        message
-      )}`;
+      `https://wa.me/${WHATSAPP_NUMBER}` +
+      `?text=${encodeURIComponent(message)}`;
 
     window.open(
       whatsappUrl,
-      '_blank',
-      'noopener,noreferrer'
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
+
+  /* ----------------------------------
+     INSTAGRAM
+  ---------------------------------- */
+  const handleInstagram = () => {
+    window.open(
+      `https://www.instagram.com/${CREATOR_PROFILE.instagram}/`,
+      "_blank",
+      "noopener,noreferrer"
     );
   };
 
@@ -79,376 +155,570 @@ export const ContactModal: React.FC<ContactModalProps> = ({
       className="
         fixed
         inset-0
-        z-50
+        z-[9999]
         flex
         items-center
         justify-center
-        p-4
-        bg-black/75
+        bg-black/55
+        p-3
         backdrop-blur-sm
-        animate-in
-        fade-in
-        duration-200
+        sm:p-5
       "
-      onClick={onClose}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
     >
+      {/* ----------------------------------
+          MODAL
+      ---------------------------------- */}
       <div
         className="
           relative
+          flex
           w-full
-          max-w-md
-          bg-[#FBF8F5]
-          rounded-3xl
-          border
-          border-[#E8DFC2]
-          shadow-2xl
+          max-w-[460px]
+          max-h-[92vh]
+          flex-col
           overflow-hidden
-          animate-in
-          zoom-in-95
-          duration-200
+          rounded-[26px]
+          border
+          border-white/70
+          bg-[#fffaf5]
+          shadow-[0_30px_90px_rgba(0,0,0,0.28)]
         "
-        onClick={(event) =>
-          event.stopPropagation()
-        }
+        onMouseDown={(event) => {
+          event.stopPropagation();
+        }}
       >
-
-        {/* ==========================================================
-            HEADER
-        =========================================================== */}
-
+        {/* TOP ACCENT */}
         <div
           className="
-            relative
+            h-[3px]
+            w-full
+            shrink-0
+            bg-gradient-to-r
+            from-[#d89a6a]
+            via-[#b8754d]
+            to-[#d89a6a]
+          "
+        />
+
+        {/* ----------------------------------
+            HEADER
+        ---------------------------------- */}
+        <div
+          className="
+            shrink-0
             px-5
-            py-5
-            sm:px-7
-            sm:py-7
-            bg-[#F6EFE5]
-            border-b
-            border-[#E8DFC2]
+            pb-1
+            pt-5
+            sm:px-6
+            sm:pt-6
           "
         >
+          <div className="flex items-start justify-between gap-4">
+            {/* TITLE */}
+            <div className="min-w-0">
+              <div
+                className="
+                  mb-2
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-full
+                  bg-[#f2e3d7]
+                  px-3
+                  py-1
+                  text-[10px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.16em]
+                  text-[#8a563d]
+                "
+              >
+                <span
+                  className="
+                    h-1.5
+                    w-1.5
+                    rounded-full
+                    bg-[#b8754d]
+                  "
+                />
 
-          {/* Decorative element */}
+                Let's Connect
+              </div>
 
-          <div
-            className="
-              absolute
-              top-0
-              right-0
-              w-32
-              h-32
-              rounded-full
-              bg-[#B56B5A]/5
-              blur-2xl
-              pointer-events-none
-            "
-          />
+              <h2
+                className="
+                  text-[23px]
+                  font-semibold
+                  leading-tight
+                  tracking-[-0.03em]
+                  text-[#25211f]
+                  sm:text-[25px]
+                "
+              >
+                Work with Ankita
+              </h2>
 
-          {/* Close */}
+              <p
+                className="
+                  mt-1.5
+                  text-[12px]
+                  leading-relaxed
+                  text-[#81766f]
+                "
+              >
+                Tell us what you're looking for and
+                connect directly.
+              </p>
+            </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="
-              absolute
-              top-4
-              right-4
-              w-9
-              h-9
-              rounded-full
-              flex
-              items-center
-              justify-center
-              text-[#524941]
-              hover:bg-black/5
-              transition-colors
-              cursor-pointer
-              z-10
-            "
-            aria-label="Close"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
-          {/* Content */}
-
-          <div className="relative pr-8">
-
-            <div
+            {/* CLOSE */}
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close modal"
               className="
                 flex
+                h-9
+                w-9
+                shrink-0
                 items-center
-                gap-2
-                mb-3
+                justify-center
+                rounded-full
+                border
+                border-[#eaded5]
+                bg-white
+                text-[#756a63]
+                transition-all
+                duration-200
+                hover:border-[#d8b9a5]
+                hover:bg-[#f7eee8]
+                hover:text-[#8d5439]
+                active:scale-95
               "
             >
-              <span
-                className="
-                  w-7
-                  h-px
-                  bg-[#B56B5A]
-                "
+              <X
+                size={17}
+                strokeWidth={2}
               />
+            </button>
+          </div>
+        </div>
+
+        {/* ----------------------------------
+            SCROLLABLE CONTENT
+            Scrollbar hidden
+        ---------------------------------- */}
+        <div
+          className="
+            min-h-0
+            flex-1
+            overflow-y-auto
+            overscroll-contain
+            px-5
+            pb-5
+            pt-5
+            sm:px-6
+            sm:pb-6
+            scrollbar-hide
+          "
+        >
+          {/* ----------------------------------
+              NAME
+          ---------------------------------- */}
+          <div className="mb-4">
+            <label
+              htmlFor="contact-name"
+              className="
+                mb-1.5
+                block
+                text-[11px]
+                font-semibold
+                uppercase
+                tracking-[0.12em]
+                text-[#746860]
+              "
+            >
+              Your Name
+            </label>
+
+            <input
+              id="contact-name"
+              type="text"
+              value={name}
+              onChange={(event) =>
+                setName(event.target.value)
+              }
+              placeholder="Enter your name"
+              autoComplete="name"
+              className="
+                h-11
+                w-full
+                rounded-xl
+                border
+                border-[#e7d9d0]
+                bg-white
+                px-3.5
+                text-[13px]
+                text-[#292522]
+                outline-none
+                placeholder:text-[#aaa09a]
+                transition-all
+                duration-200
+                focus:border-[#bd8060]
+                focus:ring-2
+                focus:ring-[#bd8060]/10
+              "
+            />
+          </div>
+
+          {/* ----------------------------------
+              OPTIONS HEADER
+          ---------------------------------- */}
+          <div className="mb-2">
+            <div className="flex items-center justify-between">
+              <label
+                className="
+                  text-[11px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.12em]
+                  text-[#746860]
+                "
+              >
+                What can we work on?
+              </label>
 
               <span
                 className="
                   text-[10px]
-                  sm:text-[11px]
-                  font-bold
-                  tracking-[0.2em]
-                  uppercase
-                  text-[#B56B5A]
+                  text-[#a09791]
                 "
               >
-                LET'S CONNECT
+                {PROJECT_OPTIONS.length} options
               </span>
             </div>
-
-            <h3
-              className="
-                text-2xl
-                sm:text-3xl
-                font-serif
-                font-normal
-                text-[#1A1816]
-              "
-            >
-              Connect with Ankita
-            </h3>
-
-            <p
-              className="
-                mt-2
-                text-xs
-                sm:text-sm
-                leading-5
-                text-[#665B51]
-                max-w-sm
-              "
-            >
-              Enter your name and continue the
-              conversation directly on WhatsApp.
-            </p>
           </div>
-        </div>
 
-        {/* ==========================================================
-            BODY
-        =========================================================== */}
-
-        <div
-          className="
-            px-5
-            py-6
-            sm:px-7
-            sm:py-7
-          "
-        >
-
-          <form
-            onSubmit={handleWhatsApp}
-            className="space-y-5"
-          >
-
-            {/* NAME */}
-
-            <div>
-              <label
-                htmlFor="contact-name"
-                className="
-                  block
-                  text-[11px]
-                  sm:text-xs
-                  font-bold
-                  uppercase
-                  tracking-wider
-                  text-[#3D352F]
-                  mb-2
-                "
-              >
-                Your Name
-              </label>
-
-              <input
-                id="contact-name"
-                type="text"
-                value={name}
-                onChange={(event) =>
-                  setName(event.target.value)
-                }
-                placeholder="Enter your name"
-                autoComplete="name"
-                autoFocus
-                required
-                className="
-                  w-full
-                  h-12
-                  px-4
-                  rounded-xl
-                  border
-                  border-[#D9CEC0]
-                  bg-white
-                  text-sm
-                  text-[#1A1816]
-                  placeholder:text-[#A59A90]
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-[#B56B5A]/30
-                  focus:border-[#B56B5A]
-                  transition-all
-                "
-              />
-            </div>
-
-            {/* WHATSAPP BUTTON */}
-
-            <button
-              type="submit"
-              disabled={!name.trim()}
-              className="
-                group
-                w-full
-                min-h-[52px]
-                px-6
-                py-3.5
-                rounded-full
-                bg-[#1D1B18]
-                hover:bg-[#342F2A]
-                disabled:bg-[#B9B1AA]
-                disabled:cursor-not-allowed
-                text-white
-                text-sm
-                font-semibold
-                tracking-wide
-                flex
-                items-center
-                justify-center
-                gap-2.5
-                transition-all
-                duration-300
-                shadow-md
-                hover:shadow-lg
-              "
-            >
-              <MessageCircle
-                className="
-                  w-5
-                  h-5
-                  text-[#9FE3B1]
-                  group-hover:scale-110
-                  transition-transform
-                "
-              />
-
-              <span>
-                Connect over WhatsApp
-              </span>
-
-              <ArrowUpRight
-                className="
-                  w-4
-                  h-4
-                  opacity-70
-                  group-hover:translate-x-0.5
-                  group-hover:-translate-y-0.5
-                  transition-transform
-                "
-              />
-            </button>
-          </form>
-
-          {/* ========================================================
-              DIRECT CHANNELS
-          ========================================================= */}
-
+          {/* ----------------------------------
+              OPTIONS GRID
+          ---------------------------------- */}
           <div
             className="
-              mt-6
-              pt-5
-              border-t
-              border-[#E8DEC8]
+              grid
+              grid-cols-2
+              gap-2
+              sm:grid-cols-3
             "
           >
-            <p
-              className="
-                text-[10px]
-                uppercase
-                tracking-[0.15em]
-                font-semibold
-                text-[#8A7D72]
-                mb-3
-              "
-            >
-              Or connect directly
-            </p>
+            {PROJECT_OPTIONS.map((option) => {
+              const Icon = option.icon;
 
+              const isSelected =
+                selectedOption === option.id;
+
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() =>
+                    setSelectedOption(option.id)
+                  }
+                  aria-pressed={isSelected}
+                  className={`
+                    group
+                    relative
+                    flex
+                    min-h-[67px]
+                    flex-col
+                    items-center
+                    justify-center
+                    rounded-[14px]
+                    border
+                    px-2
+                    py-2.5
+                    text-center
+                    transition-all
+                    duration-200
+                    active:scale-[0.97]
+
+                    ${
+                      isSelected
+                        ? `
+                          border-[#b8754d]
+                          bg-[#f5e5da]
+                          shadow-[0_5px_18px_rgba(184,117,77,0.12)]
+                        `
+                        : `
+                          border-[#eaded6]
+                          bg-white
+                          hover:border-[#d7bbaa]
+                          hover:bg-[#fdf8f4]
+                        `
+                    }
+                  `}
+                >
+                  {/* CHECK */}
+                  {isSelected && (
+                    <span
+                      className="
+                        absolute
+                        right-1.5
+                        top-1.5
+                        flex
+                        h-4
+                        w-4
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-[#b8754d]
+                        text-white
+                      "
+                    >
+                      <Check
+                        size={10}
+                        strokeWidth={3}
+                      />
+                    </span>
+                  )}
+
+                  {/* ICON */}
+                  <span
+                    className={`
+                      mb-1.5
+                      flex
+                      h-7
+                      w-7
+                      items-center
+                      justify-center
+                      rounded-lg
+                      transition-all
+                      duration-200
+
+                      ${
+                        isSelected
+                          ? `
+                            bg-[#b8754d]
+                            text-white
+                          `
+                          : `
+                            bg-[#f5eee9]
+                            text-[#9a6a51]
+                            group-hover:bg-[#f0e3da]
+                          `
+                      }
+                    `}
+                  >
+                    <Icon
+                      size={14}
+                      strokeWidth={1.9}
+                    />
+                  </span>
+
+                  {/* TITLE */}
+                  <span
+                    className={`
+                      max-w-full
+                      truncate
+                      text-[10.5px]
+                      font-semibold
+                      leading-tight
+                      sm:text-[11px]
+
+                      ${
+                        isSelected
+                          ? "text-[#7e4c35]"
+                          : "text-[#514943]"
+                      }
+                    `}
+                  >
+                    {option.title}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* ----------------------------------
+              SELECTED OPTION
+          ---------------------------------- */}
+          <div
+            className="
+              mt-3
+              flex
+              items-center
+              justify-between
+              rounded-xl
+              border
+              border-[#eee2da]
+              bg-[#faf4ef]
+              px-3
+              py-2.5
+            "
+          >
             <div
               className="
                 flex
+                min-w-0
                 items-center
-                gap-3
+                gap-2
               "
             >
-
-              {/* Instagram */}
-
-              <a
-                href={
-                  CREATOR_PROFILE.instagramUrl
-                }
-                target="_blank"
-                rel="noopener noreferrer"
+              <span
                 className="
-                  flex-1
-                  min-h-[44px]
-                  px-3
-                  rounded-xl
-                  border
-                  border-[#E0D5C9]
-                  bg-white
                   flex
+                  h-6
+                  w-6
+                  shrink-0
                   items-center
                   justify-center
-                  gap-2
-                  text-xs
-                  font-semibold
-                  text-[#3B342D]
-                  hover:bg-[#F7F0E9]
-                  hover:border-[#CDBCAF]
-                  transition-all
+                  rounded-full
+                  bg-[#ead6c8]
+                  text-[#8b593f]
                 "
               >
-                <Instagram
-                  className="
-                    w-4
-                    h-4
-                    text-[#B56B5A]
-                  "
+                <Check
+                  size={12}
+                  strokeWidth={2.5}
                 />
+              </span>
 
-                <span>
-                  Instagram
-                </span>
-              </a>
+              <div className="min-w-0">
+                <p
+                  className="
+                    text-[9px]
+                    uppercase
+                    tracking-[0.12em]
+                    text-[#9b8c83]
+                  "
+                >
+                  Selected
+                </p>
+
+                <p
+                  className="
+                    truncate
+                    text-[11px]
+                    font-semibold
+                    text-[#51463f]
+                  "
+                >
+                  {projectName}
+                </p>
+              </div>
             </div>
+
+            <ArrowRight
+              size={14}
+              className="
+                shrink-0
+                text-[#b88a70]
+              "
+            />
           </div>
 
-          {/* ========================================================
-              PRIVACY / SMALL NOTE
-          ========================================================= */}
-
-          <p
+          {/* ----------------------------------
+              WHATSAPP BUTTON
+          ---------------------------------- */}
+          <button
+            type="button"
+            onClick={handleWhatsApp}
             className="
-              mt-5
-              text-[10px]
-              leading-4
-              text-center
-              text-[#9A8F85]
+              mt-3
+              flex
+              h-12
+              w-full
+              items-center
+              justify-center
+              gap-2.5
+              rounded-[14px]
+              bg-[#24211f]
+              px-4
+              text-[12px]
+              font-semibold
+              text-white
+              shadow-[0_8px_25px_rgba(36,33,31,0.16)]
+              transition-all
+              duration-200
+              hover:-translate-y-[1px]
+              hover:bg-[#171514]
+              hover:shadow-[0_12px_30px_rgba(36,33,31,0.2)]
+              active:translate-y-0
             "
           >
-            You’ll be redirected to WhatsApp to
-            continue the conversation.
+            <span
+              className="
+                flex
+                h-7
+                w-7
+                items-center
+                justify-center
+                rounded-full
+                bg-[#25D366]
+                text-white
+              "
+            >
+              <MessageCircle
+                size={15}
+                fill="currentColor"
+              />
+            </span>
+
+            <span>
+              Connect on WhatsApp
+            </span>
+
+            <ArrowRight
+              size={15}
+              className="ml-0.5 opacity-70"
+            />
+          </button>
+
+          {/* ----------------------------------
+              INSTAGRAM
+          ---------------------------------- */}
+          <button
+            type="button"
+            onClick={handleInstagram}
+            className="
+              mt-2
+              flex
+              w-full
+              items-center
+              justify-center
+              gap-1.5
+              py-1.5
+              text-[10.5px]
+              font-medium
+              text-[#8d7163]
+              transition-colors
+              duration-200
+              hover:text-[#9b573a]
+            "
+          >
+            <Instagram size={13} />
+
+            View Instagram Profile
+          </button>
+
+          {/* ----------------------------------
+              FOOT NOTE
+          ---------------------------------- */}
+          <p
+            className="
+              mt-1
+              text-center
+              text-[9px]
+              leading-relaxed
+              text-[#aaa09a]
+            "
+          >
+            Your details will open directly in
+            WhatsApp.
           </p>
         </div>
       </div>

@@ -1,293 +1,91 @@
-import React from 'react';
-import { ShieldCheck } from 'lucide-react';
+import React, { useEffect, useRef, useState } from "react";
+import { ShieldCheck } from "lucide-react";
 
 /* ================================================================
-   BRANDS
+   BRAND IMAGES
 ================================================================ */
 
 const BRANDS = [
   {
-    name: 'Amazon',
-    logo: 'amazon',
-    category: 'E-Commerce',
+    name: "Amazon",
+    image: "/assets/images/brands/1.png",
   },
   {
-    name: 'Flipkart',
-    logo: 'flipkart',
-    category: 'Shopping',
+    name: "Flipkart",
+    image: "/assets/images/brands/2.webp",
   },
   {
-    name: 'Myntra',
-    logo: 'myntra',
-    category: 'Fashion',
+    name: "Myntra",
+    image: "/assets/images/brands/3.jpeg",
   },
   {
-    name: 'Nykaa',
-    logo: 'nykaa',
-    category: 'Beauty',
+    name: "Nykaa",
+    image: "/assets/images/brands/4.png",
   },
   {
-    name: 'Mamaearth',
-    logo: 'mamaearth',
-    category: 'Beauty & Wellness',
+    name: "Mamaearth",
+    image: "/assets/images/brands/5.jpeg",
   },
   {
-    name: 'boAt',
-    logo: 'boAt',
-    category: 'Lifestyle & Tech',
-  },
-  {
-    name: 'MARS Cosmetics',
-    logo: 'mars',
-    category: 'Cosmetics',
-  },
-  {
-    name: 'Sugar Cosmetics',
-    logo: 'sugar',
-    category: 'Beauty',
-  },
-  {
-    name: 'Meesho',
-    logo: 'meesho',
-    category: 'E-Commerce',
-  },
-  {
-    name: 'AJIO',
-    logo: 'ajio',
-    category: 'Fashion',
-  },
-  {
-    name: 'Purplle',
-    logo: 'purplle',
-    category: 'Beauty',
-  },
-  {
-    name: 'WOW Skin Science',
-    logo: 'wow',
-    category: 'Personal Care',
+    name: "boAt",
+    image: "/assets/images/brands/6.jpeg",
   },
 ];
 
 /* ================================================================
-   BRAND LOGO
+   BRAND CARD
 ================================================================ */
 
 const BrandLogo: React.FC<{
   brand: (typeof BRANDS)[number];
-}> = ({ brand }) => {
+  scale: number;
+}> = ({ brand, scale }) => {
   return (
     <div
       className="
+        brand-card
+        group
         flex
-        flex-col
+        h-[90px]
+        w-[150px]
+        shrink-0
         items-center
         justify-center
-        min-w-[150px]
-        sm:min-w-[180px]
-        lg:min-w-[200px]
-        h-[100px]
-        sm:h-[110px]
-        px-5
         rounded-2xl
-        bg-[#FAF6F0]
         border
         border-[#E8DEC8]
-        hover:bg-white
-        hover:border-[#D0C0A5]
-        hover:-translate-y-1
-        transition-all
-        duration-300
-        group
-        shrink-0
+        bg-[#FAF6F0]
+        px-5
+        transition-transform
+        duration-200
+        ease-out
+        sm:h-[100px]
+        sm:w-[175px]
+        lg:h-[110px]
+        lg:w-[195px]
       "
+      style={{
+        transform: `scale(${scale})`,
+      }}
     >
-      {/* LOGO AREA */}
-
-      <div
+      <img
+        src={brand.image}
+        alt={brand.name}
+        loading="lazy"
+        draggable={false}
         className="
-          h-10
-          sm:h-11
-          flex
-          items-center
-          justify-center
-          text-[#332D28]
-          group-hover:text-[#B56B5A]
-          transition-colors
+          max-h-[55px]
+          max-w-[125px]
+          object-contain
+          transition-transform
           duration-300
+          group-hover:scale-105
+          sm:max-h-[62px]
+          sm:max-w-[145px]
+          lg:max-h-[68px]
+          lg:max-w-[165px]
         "
-      >
-        {brand.logo === 'amazon' && (
-          <span
-            className="
-              text-xl
-              sm:text-2xl
-              font-bold
-              tracking-[-0.04em]
-            "
-          >
-            amazon
-          </span>
-        )}
-
-        {brand.logo === 'flipkart' && (
-          <span
-            className="
-              text-lg
-              sm:text-xl
-              font-extrabold
-              tracking-tight
-            "
-          >
-            Flipkart
-          </span>
-        )}
-
-        {brand.logo === 'myntra' && (
-          <span
-            className="
-              text-xl
-              sm:text-2xl
-              font-black
-              tracking-tight
-            "
-          >
-            myntra
-          </span>
-        )}
-
-        {brand.logo === 'nykaa' && (
-          <span
-            className="
-              text-xl
-              sm:text-2xl
-              font-serif
-              font-bold
-              tracking-tight
-            "
-          >
-            NYKAA
-          </span>
-        )}
-
-        {brand.logo === 'mamaearth' && (
-          <span
-            className="
-              text-lg
-              sm:text-xl
-              font-bold
-              tracking-tight
-            "
-          >
-            mamaearth
-          </span>
-        )}
-
-        {brand.logo === 'boat' && (
-          <span
-            className="
-              text-2xl
-              sm:text-3xl
-              font-black
-              tracking-[-0.06em]
-            "
-          >
-            boAt
-          </span>
-        )}
-
-        {brand.logo === 'mars' && (
-          <span
-            className="
-              text-lg
-              sm:text-xl
-              font-extrabold
-              tracking-[0.08em]
-            "
-          >
-            MARS
-          </span>
-        )}
-
-        {brand.logo === 'sugar' && (
-          <span
-            className="
-              text-lg
-              sm:text-xl
-              font-bold
-              tracking-[0.12em]
-            "
-          >
-            SUGAR
-          </span>
-        )}
-
-        {brand.logo === 'meesho' && (
-          <span
-            className="
-              text-xl
-              sm:text-2xl
-              font-extrabold
-              tracking-tight
-            "
-          >
-            meesho
-          </span>
-        )}
-
-        {brand.logo === 'ajio' && (
-          <span
-            className="
-              text-xl
-              sm:text-2xl
-              font-black
-              tracking-[0.08em]
-            "
-          >
-            AJIO
-          </span>
-        )}
-
-        {brand.logo === 'purplle' && (
-          <span
-            className="
-              text-xl
-              sm:text-2xl
-              font-bold
-              tracking-tight
-            "
-          >
-            purplle
-          </span>
-        )}
-
-        {brand.logo === 'wow' && (
-          <span
-            className="
-              text-xl
-              sm:text-2xl
-              font-black
-              tracking-[0.05em]
-            "
-          >
-            WOW
-          </span>
-        )}
-      </div>
-
-      {/* CATEGORY */}
-
-      <span
-        className="
-          text-[9px]
-          sm:text-[10px]
-          text-[#85786D]
-          text-center
-          mt-1
-          whitespace-nowrap
-        "
-      >
-        {brand.category}
-      </span>
+      />
     </div>
   );
 };
@@ -297,40 +95,120 @@ const BrandLogo: React.FC<{
 ================================================================ */
 
 const MarqueeRow: React.FC = () => {
-  /*
-   * Duplicate the list.
-   * The animation moves exactly one complete set,
-   * creating a seamless infinite loop.
-   */
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  const marqueeItems = [...BRANDS, ...BRANDS];
+  const [scales, setScales] = useState<number[]>([]);
+
+  const marqueeItems = [...BRANDS, ...BRANDS, ...BRANDS];
+
+  /* ------------------------------------------------
+     Calculate scale based on distance from center
+  ------------------------------------------------ */
+
+  useEffect(() => {
+    let animationFrame = 0;
+
+    const updateScales = () => {
+      const container = containerRef.current;
+      const track = trackRef.current;
+
+      if (!container || !track) return;
+
+      const containerRect = container.getBoundingClientRect();
+
+      const viewportCenter =
+        containerRect.left + containerRect.width / 2;
+
+      const cards =
+        track.querySelectorAll<HTMLElement>(".brand-card");
+
+      const newScales: number[] = [];
+
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+
+        const cardCenter =
+          rect.left + rect.width / 2;
+
+        const distance =
+          Math.abs(viewportCenter - cardCenter);
+
+        /*
+          0 distance = 1.18 scale
+          Further away = smaller
+        */
+
+        const maxDistance =
+          containerRect.width * 0.55;
+
+        const normalized =
+          Math.min(distance / maxDistance, 1);
+
+        /*
+          Smooth falloff
+        */
+
+        const scale =
+          1.18 -
+          normalized * 0.36;
+
+        newScales.push(
+          Math.max(0.82, Math.min(1.18, scale))
+        );
+      });
+
+      setScales(newScales);
+
+      animationFrame =
+        requestAnimationFrame(updateScales);
+    };
+
+    animationFrame =
+      requestAnimationFrame(updateScales);
+
+    window.addEventListener(
+      "resize",
+      updateScales
+    );
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+
+      window.removeEventListener(
+        "resize",
+        updateScales
+      );
+    };
+  }, []);
 
   return (
     <div
+      ref={containerRef}
       className="
         relative
         w-full
         overflow-hidden
-        py-2
+        py-8
+        sm:py-10
       "
     >
-
       {/* LEFT FADE */}
 
       <div
         className="
+          pointer-events-none
           absolute
           left-0
           top-0
-          bottom-0
-          w-12
-          sm:w-20
-          lg:w-28
+          z-20
+          h-full
+          w-14
           bg-gradient-to-r
           from-[#F8F3EC]
           to-transparent
-          z-10
-          pointer-events-none
+          sm:w-24
+          lg:w-32
         "
       />
 
@@ -338,38 +216,61 @@ const MarqueeRow: React.FC = () => {
 
       <div
         className="
+          pointer-events-none
           absolute
           right-0
           top-0
-          bottom-0
-          w-12
-          sm:w-20
-          lg:w-28
+          z-20
+          h-full
+          w-14
           bg-gradient-to-l
           from-[#F8F3EC]
           to-transparent
-          z-10
+          sm:w-24
+          lg:w-32
+        "
+      />
+
+      {/* CENTER GLOW */}
+
+      <div
+        className="
           pointer-events-none
+          absolute
+          left-1/2
+          top-1/2
+          z-0
+          h-[180px]
+          w-[180px]
+          -translate-x-1/2
+          -translate-y-1/2
+          rounded-full
+          bg-[#EAD8C8]/30
+          blur-3xl
         "
       />
 
       {/* MOVING TRACK */}
 
       <div
+        ref={trackRef}
         className="
+          relative
+          z-10
           flex
-          items-center
-          gap-4
-          sm:gap-5
           w-max
+          items-center
+          gap-5
           animate-brand-marquee
-          hover:[animation-play-state:paused]
+          sm:gap-7
+          lg:gap-8
         "
       >
         {marqueeItems.map((brand, index) => (
           <BrandLogo
             key={`${brand.name}-${index}`}
             brand={brand}
+            scale={scales[index] || 0.82}
           />
         ))}
       </div>
@@ -385,8 +286,8 @@ export const BrandsMarquee: React.FC = () => {
   return (
     <>
       {/* ============================================================
-          MARQUEE ANIMATION
-      ============================================================= */}
+          ANIMATION
+      ============================================================ */}
 
       <style>{`
         @keyframes brandMarquee {
@@ -395,18 +296,25 @@ export const BrandsMarquee: React.FC = () => {
           }
 
           100% {
-            transform: translateX(calc(-50% - 10px));
+            transform: translateX(calc(-33.333333% - 7px));
           }
         }
 
         .animate-brand-marquee {
-          animation: brandMarquee 35s linear infinite;
+          animation:
+            brandMarquee 28s
+            linear
+            infinite;
           will-change: transform;
+        }
+
+        .animate-brand-marquee:hover {
+          animation-play-state: paused;
         }
 
         @media (max-width: 640px) {
           .animate-brand-marquee {
-            animation-duration: 28s;
+            animation-duration: 22s;
           }
         }
 
@@ -418,45 +326,47 @@ export const BrandsMarquee: React.FC = () => {
         }
       `}</style>
 
+      {/* ============================================================
+          SECTION
+      ============================================================ */}
+
       <section
         id="brands-section"
         className="
           relative
-          py-12
-          sm:py-16
-          bg-[#F8F3EC]
+          overflow-hidden
           border-b
           border-[#E8DFC2]
-          overflow-hidden
+          bg-[#F8F3EC]
+          py-12
+          sm:py-16
         "
       >
-
-        <div className="max-w-7xl mx-auto">
-
+        <div className="mx-auto max-w-7xl">
           {/* ========================================================
               HEADING
-          ========================================================= */}
+          ======================================================== */}
 
           <div
             className="
-              text-center
-              max-w-xl
               mx-auto
+              mb-6
+              max-w-xl
               px-4
+              text-center
+              sm:mb-8
               sm:px-6
-              mb-8
-              sm:mb-10
             "
           >
             <span
               className="
-                text-[10px]
-                sm:text-[11px]
-                font-semibold
-                tracking-[0.25em]
-                uppercase
-                text-[#B56B5A]
                 block
+                text-[10px]
+                font-semibold
+                uppercase
+                tracking-[0.25em]
+                text-[#B56B5A]
+                sm:text-[11px]
               "
             >
               TRUSTED BY FORWARD-THINKING BRANDS
@@ -464,12 +374,12 @@ export const BrandsMarquee: React.FC = () => {
 
             <h3
               className="
+                mt-2
                 font-serif
                 text-2xl
-                sm:text-3xl
                 font-normal
                 text-[#1A1816]
-                mt-2
+                sm:text-3xl
               "
             >
               Past Collaborations & Integrations
@@ -479,8 +389,8 @@ export const BrandsMarquee: React.FC = () => {
               className="
                 mt-2
                 text-xs
-                sm:text-sm
                 text-[#85786D]
+                sm:text-sm
               "
             >
               Creating authentic content that connects
@@ -488,33 +398,32 @@ export const BrandsMarquee: React.FC = () => {
             </p>
           </div>
 
-
           {/* ========================================================
-              CONTINUOUS MARQUEE
-          ========================================================= */}
+              MARQUEE
+          ======================================================== */}
 
           <MarqueeRow />
 
-
           {/* ========================================================
               TRUST MESSAGE
-          ========================================================= */}
+          ======================================================== */}
 
           <div
             className="
-              mt-8
+              mt-5
               flex
               items-center
               justify-center
               gap-2
               px-4
               text-center
+              sm:mt-7
             "
           >
             <ShieldCheck
               className="
-                w-4
                 h-4
+                w-4
                 shrink-0
                 text-[#B56B5A]
               "
@@ -523,15 +432,14 @@ export const BrandsMarquee: React.FC = () => {
             <span
               className="
                 text-[10px]
-                sm:text-xs
                 text-[#706458]
+                sm:text-xs
               "
             >
               Authentic audience · Organic engagement ·
               Brand-safe collaborations
             </span>
           </div>
-
         </div>
       </section>
     </>

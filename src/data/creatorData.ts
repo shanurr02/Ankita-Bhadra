@@ -8,7 +8,7 @@ export const CREATOR_PROFILE = {
   name: 'Ankita Bhadra',
   tagline: 'CONTENT CREATOR · ANCHOR',
 
-  bio: 'I’m Ankita Bhadra — a content creator creating natural, engaging short-form videos that help brands connect with real people.',
+  bio: 'I’m Ankita Bhadra - a content creator creating natural, engaging short-form videos that help brands connect with real people.',
 
   instagramHandle: '__bhadra___',
 
@@ -16,7 +16,7 @@ export const CREATOR_PROFILE = {
 
   email: 'collaborate.ankitabhadra@gmail.com',
 
-  location: 'Mumbai & Kolkata, India',
+  location: '',
 
   portraitImage: '/assets/images/profile.JPEG',
 
