@@ -82,7 +82,7 @@ export const REELS: Reel[] = [
 
     category: 'Anchoring & Events',
 
-    thumbnailUrl: '/src/assets/images/reel-dv3.jpg',
+    thumbnailUrl: '/assets/images/reel-dv3.jpg',
 
     views: '185K',
     likes: '21.6K',
@@ -115,7 +115,7 @@ export const REELS: Reel[] = [
 
     category: 'Anchoring & Events',
 
-    thumbnailUrl: '/src/assets/images/reel-dbq.jpg',
+    thumbnailUrl: '/assets/images/reel-dbq.jpg',
 
     views: '142K',
     likes: '16.8K',
@@ -148,7 +148,7 @@ export const REELS: Reel[] = [
 
     category: 'Anchoring & Events',
 
-    thumbnailUrl: '/src/assets/images/reel-dz5.jpg',
+    thumbnailUrl: '/assets/images/reel-dz5.jpg',
 
     views: '198K',
     likes: '24.1K',
@@ -179,7 +179,7 @@ export const REELS: Reel[] = [
     category: 'Anchoring & Events',
 
     thumbnailUrl:
-      '/src/assets/images/reel_railway_1789556564385.jpg',
+      '/assets/images/reel_railway_1789556564385.jpg',
 
     views: '168K',
     likes: '19.4K',
@@ -213,7 +213,7 @@ export const REELS: Reel[] = [
     category: 'Brand Collabs',
 
     thumbnailUrl:
-      '/src/assets/images/reel_edtech_1789556583965.jpg',
+      '/assets/images/reel_edtech_1789556583965.jpg',
 
     views: '294K',
     likes: '34.2K',
@@ -244,7 +244,7 @@ export const REELS: Reel[] = [
     category: 'Anchoring & Events',
 
     thumbnailUrl:
-      '/src/assets/images/reel_emcee_1789556601198.jpg',
+      '/assets/images/reel_emcee_1789556601198.jpg',
 
     views: '112K',
     likes: '14.1K',
@@ -275,7 +275,7 @@ export const REELS: Reel[] = [
     category: 'Anchoring & Events',
 
     thumbnailUrl:
-      '/src/assets/images/reel_campus_fest_1789560331889.jpg',
+      '/assets/images/reel_campus_fest_1789560331889.jpg',
 
     views: '226K',
     likes: '28.9K',
@@ -309,7 +309,7 @@ export const REELS: Reel[] = [
     category: 'Brand Collabs',
 
     thumbnailUrl:
-      '/src/assets/images/reel_beauty_collab_1789560354770.jpg',
+      '/assets/images/reel_beauty_collab_1789560354770.jpg',
 
     views: '315K',
     likes: '41.2K',
@@ -341,7 +341,7 @@ export const REELS: Reel[] = [
     category: 'EdTech & Reviews',
 
     thumbnailUrl:
-      '/src/assets/images/reel_audio_tech_1789560377226.jpg',
+      '/assets/images/reel_audio_tech_1789560377226.jpg',
 
     views: '178K',
     likes: '22.4K',
@@ -379,7 +379,7 @@ export const REELS: Reel[] = [
     category: 'Vlogs & Lifestyle',
 
     thumbnailUrl:
-      '/src/assets/images/reel_food_vlog_1789560391759.jpg',
+      '/assets/images/reel_food_vlog_1789560391759.jpg',
 
     views: '245K',
     likes: '31.8K',
@@ -417,7 +417,7 @@ export const REELS: Reel[] = [
     category: 'Vlogs & Lifestyle',
 
     thumbnailUrl:
-      '/src/assets/images/ankita_portrait_1789556546665.jpg',
+      '/assets/images/ankita_portrait_1789556546665.jpg',
 
     views: '135K',
     likes: '18.7K',
