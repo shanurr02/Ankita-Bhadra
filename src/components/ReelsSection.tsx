@@ -36,7 +36,20 @@ const CREATOR = {
    INSTAGRAM REELS
 ================================================================ */
 
+
 const INSTAGRAM_REELS: InstagramReel[] = [
+   {
+    id: 'reel-new',
+    shortcode: 'DdePAwUBZw1',
+    url: 'https://www.instagram.com/reel/DdePAwUBZw1/',
+    title: 'Instagram Reel',
+    caption:
+      'Watch Ankita Bhadra on Instagram. Open the Reel to explore the original content and engagement.',
+    category: 'Instagram Reels',
+    date: 'Latest',
+    brand: '',
+  },
+
   {
     id: 'reel-dcs',
     shortcode: 'DcsxZLHT0xs',
